@@ -19,18 +19,18 @@ export default function Signup({}){
                     <span>PopX Account</span>
                 </h1>
 
-                <Input placeholder="Enter email address" label="Full Name" required={true} />
-                <Input placeholder="Enter password" label="Phome number" required={true} />
-                <Input placeholder="Enter password" label="Email address" required={true} />
-                <Input placeholder="Enter password" label="Password" required={true} />
-                <Input placeholder="Enter password" label="Company name" required={true} />
+                <Input placeholder="Enter Full Name" label="Full Name" required={true} />
+                <Input placeholder="Enter Phone number" label="Phome number" required={true} type="tel" />
+                <Input placeholder="Enter Email address" label="Email address" required={true} type="email" />
+                <Input placeholder="Enter password" label="Password" required={true} type="password" />
+                <Input placeholder="Enter Company name" label="Company name" required={true} />
                 <div className="text-sm font-semibold opacity-80">
                     <h1>Are you an Agency ?</h1>
                     
-                    <input id="isAgency-yes" type="radio" name="isAgency"  />
+                    <input id="isAgency-yes" type="radio" name="isAgency" required={true}  />
                     <label htmlFor="isAgency-yes" className="px-1">Yes</label>
 
-                    <input id="isAgency-no" type="radio" name="isAgency" className="ml-4" />
+                    <input id="isAgency-no" type="radio" name="isAgency" className="ml-4" required={true} />
                     <label htmlFor="isAgency-no" className="px-1">No</label>
                 </div>
 

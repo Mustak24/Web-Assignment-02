@@ -15,7 +15,7 @@ export default function Home({}){
             <div className="w-full flex flex-col items-center max-sm:hidden">
                 <View minWidth={640}>
                     <ParticleText 
-                        text="Popx"
+                        text="PopX"
                         pixelColor="black"
                         gap={0}
                         border={5}
@@ -29,6 +29,16 @@ export default function Home({}){
                     className="opacity-70 text-xs max-w-[350px] font-semibold pl-1 text-center" 
                     text="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta soluta commodi fugiat officiis necessitatibus." 
                 />
+
+                <div className="flex gap-5 mt-10">
+                    <Link to={'/signup'} className="flex">
+                        <Button>Create Account</Button>
+                    </Link>
+
+                    <Link to={'/login'} className="flex">
+                        <Button isPrimary={false}>Already Register? Login</Button>
+                    </Link>
+                </div>
             </div>
 
             <div className="flex flex-col w-full absolute bottom-0 left-0 pb-5 px-2 sm:hidden">
@@ -45,11 +55,11 @@ export default function Home({}){
                 />
 
                 <div className="flex flex-col gap-5 my-5 w-full">
-                    <Link to={'/login'} className="flex">
+                    <Link to={'/signup'} className="flex">
                         <Button>Create Account</Button>
                     </Link>
 
-                    <Link to={'/signup'} className="flex">
+                    <Link to={'/login'} className="flex">
                         <Button isPrimary={false}>Already Register? Login</Button>
                     </Link>
                 </div>

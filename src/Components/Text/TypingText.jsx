@@ -1,6 +1,6 @@
 export default function TypingText({text='', className, speed=100}){
     return (
-        <p className={className} style={{display: 'flex', alignItems: 'center'}}>
+        <p className={className}>
             {
                 text.split('').map((char, index) => (
                     <span key={index} style={{
@@ -10,7 +10,7 @@ export default function TypingText({text='', className, speed=100}){
                         animationFillMode: 'forwards',
                         opacity: 0,
                         scale: 0,
-                        paddingInline: char === ' ' ? 3 : 0
+                        minWidth: char === ' ' ? 6 : 0
                     }} >{char}</span>
                 ))
             }

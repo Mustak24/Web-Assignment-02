@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import eventHandler from "../../Functions/eventHandler";
 
 class Pixel{
@@ -118,107 +118,108 @@ export default function ParticleText({text='WEB DEV', fontSize='40px', pixelColo
 
 
 
-    function init(){
+const init = useCallback(() => {
+    if (!canvas.current) return;
 
-        if(!canvas.current) return;
+    let { width, height } = canvas.current.getBoundingClientRect();
+    width = Math.floor(width);
+    height = Math.floor(height);
 
-        let {width, height} = canvas.current.getBoundingClientRect();
-        width = Math.floor(width);
-        height = Math.floor(height);
-        
-        if(Math.min(width, height) < 10) return;
+    if (Math.min(width, height) < 10) return;
 
-        canvas.current.width = width;
-        canvas.current.height = height;
+    canvas.current.width = width;
+    canvas.current.height = height;
 
-        ctx.current = canvas.current.getContext('2d', {willReadFrequently: true});
+    ctx.current = canvas.current.getContext('2d', { willReadFrequently: true });
 
-        ctx.current.font = `${fontSize} sans-serif`;
-        ctx.current.textAlign = 'center';
-        ctx.current.textBaseline = 'middle';
-        ctx.current.lineWidth = border;
-        ctx.current.fillStyle = 'white';
-        ctx.current.strokeStyle = 'white';
-        ctx.current.drawText(text, ...fillTextPoints);
-        ctx.current.drawTextOutline(text, ...fillTextPoints);
+    ctx.current.font = `${fontSize} sans-serif`;
+    ctx.current.textAlign = 'center';
+    ctx.current.textBaseline = 'middle';
+    ctx.current.lineWidth = border;
+    ctx.current.fillStyle = 'white';
+    ctx.current.strokeStyle = 'white';
+    ctx.current.drawText(text, ...fillTextPoints);
+    ctx.current.drawTextOutline(text, ...fillTextPoints);
 
-        let {data} = ctx.current.getImageData(0, 0, width, height);
+    let { data } = ctx.current.getImageData(0, 0, width, height);
 
-        particles.current = [];
-        for(let i=0; i<height; i += pixelSize + gap){
-            for(let j=0; j<width; j += pixelSize + gap){
-                let index = 4*(i*width + j);
-                if(index && data[index + 3])
-                    particles.current.push(new Pixel(j, i, pixelSize, pixelColor, originF))
-            }
-        }
-
-        ctx.current.clearRect(0,0,width, height)
+    particles.current = [];
+    for (let i = 0; i < height; i += pixelSize + gap) {
+      for (let j = 0; j < width; j += pixelSize + gap) {
+        let index = 4 * (i * width + j);
+        if (index && data[index + 3])
+          particles.current.push(new Pixel(j, i, pixelSize, pixelColor, originF));
+      }
     }
 
-    function animation(){
-        needDraw.current = false;
+    ctx.current.clearRect(0, 0, width, height);
+  }, [fontSize, border, fillTextPoints, gap, originF, pixelColor, pixelSize, text]);
 
-        ctx.current.clearRect(0, 0, ctx.current.canvas.width, ctx.current.canvas.height);
-        for(let particle of particles.current){
-            particle.show(ctx.current);
-            let temp = particle.update(mouseX.current, mouseY.current, mouseR);
-            needDraw.current ||= temp;
-        }
-        mouseX.current = null;
-        mouseY.current = null;
+  const animation = useCallback(() => {
+    needDraw.current = false;
 
-        if(needDraw.current) requestAnimationFrame(animation);
+    ctx.current.clearRect(0, 0, ctx.current.canvas.width, ctx.current.canvas.height);
+    for (let particle of particles.current) {
+      particle.show(ctx.current);
+      let temp = particle.update(mouseX.current, mouseY.current, mouseR);
+      needDraw.current ||= temp;
     }
+    mouseX.current = null;
+    mouseY.current = null;
 
-    function startAgainAnimation(){
-        if(!needDraw.current) {
-            needDraw.current = true;
-            animation();
-        }
+    if (needDraw.current) requestAnimationFrame(animation);
+  }, [mouseR]);
+
+  const startAgainAnimation = useCallback(() => {
+    if (!needDraw.current) {
+      needDraw.current = true;
+      animation();
     }
+  }, [animation]);
 
-    function handleMouseMove(e){
-        mouseX.current = e.offsetX;
-        mouseY.current = e.offsetY;
-        startAgainAnimation();
-    }
+  const handleMouseMove = useCallback((e) => {
+    mouseX.current = e.offsetX;
+    mouseY.current = e.offsetY;
+    startAgainAnimation();
+  }, [startAgainAnimation]);
 
-    function handleTouch(e){
-        let {pageX, pageY} = e.touches[0];
-        let {x, y} = canvas.current.getBoundingClientRect();
-        mouseX.current = pageX - x;
-        mouseY.current = pageY - y;
-        startAgainAnimation();
-    }
+  const handleTouch = useCallback((e) => {
+    let { pageX, pageY } = e.touches[0];
+    let { x, y } = canvas.current.getBoundingClientRect();
+    mouseX.current = pageX - x;
+    mouseY.current = pageY - y;
+    startAgainAnimation();
+  }, [startAgainAnimation]);
 
-    const handleResize = eventHandler(() => {
-        let width = window.innerWidth;
-        if(Math.abs(windowWidth.current - width) < 5) return;
-        
-        windowWidth.current = width;
-        init();
-        startAgainAnimation();
-    }, 1000);
+  const handleResize = useCallback(
+    eventHandler(() => {
+      let width = window.innerWidth;
+      if (Math.abs(windowWidth.current - width) < 5) return;
 
+      windowWidth.current = width;
+      init();
+      startAgainAnimation();
+    }, 1000),
+    [init, startAgainAnimation]
+  );
 
-    useEffect(() => {
-        if(!canvas.current) return;
-        
-        init()
-        animation();
+  useEffect(() => {
+    const canvasEl = canvas.current;
+    if (!canvasEl) return;
 
-        canvas.current?.addEventListener('mousemove', handleMouseMove);
-        canvas.current?.addEventListener('touchmove', handleTouch);
-        window.addEventListener('resize', handleResize);
+    init();
+    animation();
 
-        return () => {
-            canvas.current?.removeEventListener('mousemove', handleMouseMove);
-            canvas.current?.removeEventListener('touchmove', handleTouch);
-            window.removeEventListener('resize', handleResize);
-        }
-        
-    }, [handleMouseMove, handleTouch, handleResize, animation, init]);
+    canvasEl.addEventListener('mousemove', handleMouseMove);
+    canvasEl.addEventListener('touchmove', handleTouch);
+    window.addEventListener('resize', handleResize);
 
-    return <canvas ref={canvas} className={className} style={style}></canvas>
+    return () => {
+      canvasEl.removeEventListener('mousemove', handleMouseMove);
+      canvasEl.removeEventListener('touchmove', handleTouch);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [init, animation, handleMouseMove, handleTouch, handleResize]);
+
+  return <canvas ref={canvas} className={className} style={style}></canvas>;
 }

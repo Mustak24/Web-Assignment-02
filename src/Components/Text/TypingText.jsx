@@ -3,7 +3,7 @@ export default function TypingText({text='', className, speed=100}){
         <p className={className} style={{display: 'flex', alignItems: 'center'}}>
             {
                 text.split('').map((char, index) => (
-                    <span style={{
+                    <span key={index} style={{
                         animation: 'opacity-scale-0-to-1',
                         animationDelay: `${index*speed}ms`,
                         animationDuration: '100ms',

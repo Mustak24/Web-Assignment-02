@@ -191,17 +191,16 @@ const init = useCallback(() => {
     startAgainAnimation();
   }, [startAgainAnimation]);
 
-  const handleResize = useCallback(
-    eventHandler(() => {
-      let width = window.innerWidth;
-      if (Math.abs(windowWidth.current - width) < 5) return;
+    const resizeHandlerFn = useCallback(() => {
+    let width = window.innerWidth;
+    if (Math.abs(windowWidth.current - width) < 5) return;
 
-      windowWidth.current = width;
-      init();
-      startAgainAnimation();
-    }, 1000),
-    [init, startAgainAnimation]
-  );
+    windowWidth.current = width;
+    init();
+    startAgainAnimation();
+    }, [init, startAgainAnimation]);
+
+    const handleResize = eventHandler(resizeHandlerFn, 1000);
 
   useEffect(() => {
     const canvasEl = canvas.current;

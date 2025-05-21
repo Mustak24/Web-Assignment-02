@@ -218,7 +218,7 @@ export default function ParticleText({text='WEB DEV', fontSize='40px', pixelColo
             window.removeEventListener('resize', handleResize);
         }
         
-    }, []);
+    }, [handleMouseMove, handleTouch, handleResize, animation, init]);
 
     return <canvas ref={canvas} className={className} style={style}></canvas>
 }

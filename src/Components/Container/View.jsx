@@ -13,7 +13,7 @@ export default function View({children, minWidth=0, maxWidth=Infinity}){
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [handleResize]);
 
     return <>
         {isLoad ? children : null}

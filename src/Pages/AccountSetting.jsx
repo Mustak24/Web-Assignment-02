@@ -1,6 +1,6 @@
 import TypingText from "../Components/Text/TypingText";
 
-export default function AccountSetting({}){
+export default function AccountSetting(){
     return (
         <div className="w-full h-full flex flex-col items-center px-4">
             <TypingText className="bg-white font-semibold h-20 w-full flex items-center sm:justify-center" text="Account Setting" />

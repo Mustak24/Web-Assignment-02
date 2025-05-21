@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../Components/Button/Button";
 import InputText from "../Components/Input/InputText";
 
-export default function Login({}){
+export default function Login(){
 
     const navigate = useNavigate();
 

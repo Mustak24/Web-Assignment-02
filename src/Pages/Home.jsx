@@ -4,7 +4,7 @@ import View from "../Components/Container/View";
 import ParticleText from "../Components/Text/ParticleText";
 import TypingText from "../Components/Text/TypingText";
 
-export default function Home({}){
+export default function Home(){
     return (
         <div className="w-full h-full sm:p-10 p-2 relative">
             <h1 className="font-bold text-3xl opacity-75 mt-4 max-sm:hidden">

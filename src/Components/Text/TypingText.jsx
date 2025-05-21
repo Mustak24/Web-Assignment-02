@@ -10,7 +10,7 @@ export default function TypingText({text='', className, speed=100}){
                         animationFillMode: 'forwards',
                         opacity: 0,
                         scale: 0,
-                        paddingInline: char == ' ' ? 3 : 0
+                        paddingInline: char === ' ' ? 3 : 0
                     }} >{char}</span>
                 ))
             }
